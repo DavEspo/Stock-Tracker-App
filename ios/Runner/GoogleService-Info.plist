@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAxaZjg9AwwTDhjDx9yMzl16CJMFrE5fG4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>413485085367</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.stockTrackerApp</string>
+	<key>PROJECT_ID</key>
+	<string>stock-tracker-app-6bdcf</string>
+	<key>STORAGE_BUCKET</key>
+	<string>stock-tracker-app-6bdcf.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:413485085367:ios:e55dd53d7ba991dd8a9332</string>
+</dict>
+</plist>
