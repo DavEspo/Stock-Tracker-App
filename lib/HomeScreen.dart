@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
                 backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Color for Meal Planning Screen
               ),
               child: const Text(
-                "Meal Planning Screen",
+                "Watchlist",
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
             ),

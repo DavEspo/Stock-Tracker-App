@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'StockDataScreen.dart'; // Make sure to import this so StockManager is accessible
 
-class WatchListScreen extends StatelessWidget {
+class WatchListScreen extends StatefulWidget {
   const WatchListScreen({super.key});
 
+  @override
+  State<WatchListScreen> createState() => _WatchListScreenState();
+}
+
+class _WatchListScreenState extends State<WatchListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Watchlist Screen'),
+        title: const Text('Watchlist Screen'),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 13, 222, 20),
       ),
@@ -15,9 +21,29 @@ class WatchListScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               padding: const EdgeInsets.all(16.0),
-              // children: _buildDaySections(context),
+              itemCount: StockManager.savedStocks.length,
+              itemBuilder: (context, index) {
+                final stock = StockManager.savedStocks[index];
+                return ListTile(
+                  title: Text(stock),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      // Remove the stock from the saved list
+                      setState(() {
+                        StockManager.removeStock(stock);
+                      });
+
+                      // Show a confirmation SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('$stock removed from Watchlist!')),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
           ElevatedButton(
@@ -29,51 +55,5 @@ class WatchListScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  // List<Widget> _buildStockSections(BuildContext context) {
-  //   List<Widget> StockSections = [];
-  // }
-
-  Widget _buildStockSection(String day, BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(day, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            subtitle: Text('Stockname'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              // children: SavedStocks.isNotEmpty
-              //     ? SavedStocks.map((recipe) {
-              //         return ListTile(
-              //           title: Text(recipe),
-              //           trailing: IconButton(
-              //             icon: const Icon(Icons.remove),
-              //             onPressed: () {
-              //               // MealPlanManager.removeFromSavedStocks();
-              //               // ScaffoldMessenger.of(context).showSnackBar(
-              //               //   SnackBar(content: Text('$Stock removed from SavedStocks!')),
-              //               // );
-              //             },
-              //           ),
-              //         );
-              //       }).toList()
-              //     : [const Text('')],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SavedStocksManager {//this manages Fvorite Screen to Meal Plan Screen 
-
-  static void removeFromWatchlist(String day, String recipe) {
-
   }
 }

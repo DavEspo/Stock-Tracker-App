@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 const allStocks = [
   'Bitcoin',
+  'Ethereum',
+  'Tesla',
+  'Amazon',
+  'Apple', // Add more stocks if needed
 ];
-
 
 class StockDataScreen extends StatefulWidget {
   const StockDataScreen({super.key});
@@ -13,7 +16,7 @@ class StockDataScreen extends StatefulWidget {
 }
 
 class StockDataDisplay extends State<StockDataScreen> {
-  List<String> Stocks = allStocks;
+  List<String> stocks = allStocks;
   final controller = TextEditingController();
 
   @override
@@ -24,86 +27,85 @@ class StockDataDisplay extends State<StockDataScreen> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 13, 222, 20),
       ),
-      body:Column(
+      body: Column(
         children: [
-          SizedBox(
-            height: 5
-          ),
-          SizedBox(
+          const SizedBox(height: 5),
+          const SizedBox(
             width: 400,
             child: Text(
               '  Search Stock Below:',
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.left,
-            )
+            ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(16, 5, 16, 16),
+            margin: const EdgeInsets.fromLTRB(16, 5, 16, 16),
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     controller.clear();
-                    searchBook('');
-                  }
+                    searchStock('');
+                  },
                 ),
                 hintText: 'Find Stock',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.blue)
-                )
+                  borderSide: const BorderSide(color: Colors.blue),
+                ),
               ),
-              onChanged: searchBook,
-            )
+              onChanged: searchStock,
+            ),
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: Stocks.length,
+              itemCount: stocks.length,
               itemBuilder: (context, index) {
-                final Stock = Stocks[index];
+                final stock = stocks[index];
                 return Container(
-                  child: _buildStockTile(context, Stock),
+                  child: _buildStockTile(context, stock),
                   decoration: BoxDecoration(
-                    border: Border.all(width: .05)
-                  )
+                    border: Border.all(width: .05),
+                  ),
                 );
-              }
+              },
             ),
           ),
-        ]
-      )
+        ],
+      ),
     );
   }
 
-  void searchBook(String query) {
-    final suggestions = allStocks.where((Stock) {
-      final StockShown = Stock.toLowerCase();
+  void searchStock(String query) {
+    final suggestions = allStocks.where((stock) {
+      final stockShown = stock.toLowerCase();
       final input = query.toLowerCase();
 
-      return StockShown.contains(input);
+      return stockShown.contains(input);
     }).toList();
 
-    setState(() => Stocks = suggestions);
+    setState(() => stocks = suggestions);
   }
 
   // Helper method to create a stock tile
-  Widget _buildStockTile(BuildContext context, String StockName) {
+  Widget _buildStockTile(BuildContext context, String stockName) {
     return ListTile(
-      title: Text(StockName),
+      title: Text(stockName),
       trailing: IconButton(
         icon: const Icon(Icons.add),
         onPressed: () {
-          StockManager.addStock(StockName);
+          StockManager.addStock(stockName);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$StockName added to favorites!')),
+            SnackBar(content: Text('$stockName added to WatchList!')),
           );
         },
       ),
       onTap: () {
-        if (StockName == 'Bitcoin') {
+        // You can add detailed view for each stock later
+        if (stockName == 'Bitcoin') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Bitcoin()),
@@ -114,38 +116,36 @@ class StockDataDisplay extends State<StockDataScreen> {
   }
 }
 
-
 class Bitcoin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bitcoin data:'),
+        title: const Text('Bitcoin Data'),
         backgroundColor: const Color.fromARGB(255, 13, 222, 20),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image.asset(''),
-          // Text('', style: TextStyle(fontSize: 25)),
-        ],
-      )
+      body: const Center(
+        child: Text(
+          'Bitcoin data goes here!',
+          style: TextStyle(fontSize: 25),
+        ),
+      ),
     );
   }
 }
 
-class StockManager { // This manages list of saved stocks to the watchlist screen
-  static final List<String> _SavedStocks = [];
+class StockManager {
+  static final List<String> _savedStocks = [];
 
-  static List<String> get SavedStocks => _SavedStocks;
+  static List<String> get savedStocks => _savedStocks;
 
-  static void addStock(String Stock) {
-    if (!_SavedStocks.contains(Stock)) {
-      _SavedStocks.add(Stock);
+  static void addStock(String stock) {
+    if (!_savedStocks.contains(stock)) {
+      _savedStocks.add(stock);
     }
   }
 
-  static void removeStock(String Stock) {
-    _SavedStocks.remove(Stock);
+  static void removeStock(String stock) {
+    _savedStocks.remove(stock);
   }
 }
