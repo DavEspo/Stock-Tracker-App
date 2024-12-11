@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'LoginScreen.dart';
 import 'StockDataScreen.dart';
@@ -5,8 +6,16 @@ import 'WatchlistScreen.dart';
 import 'NewsFeedScreen.dart';
 import 'SettingsScreen.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class Home extends StatefulWidget {
+  Home({Key? key, required this.auth}) : super(key: key);
+  final FirebaseAuth auth;
+  
+  @override
+  HomePage createState() => HomePage();
+}
+
+class HomePage extends State<Home> {
+  // const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +32,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => StockDataScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => StockDataScreen()),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -45,10 +54,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WatchListScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => WatchListScreen()),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -67,10 +76,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NewsFeedScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const NewsFeedScreen()),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -89,10 +98,10 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => SettingsScreen()),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -111,7 +120,11 @@ class HomePage extends StatelessWidget {
           // Logout button
           ElevatedButton(
             onPressed: () {
-              _logout(context);  // Call logout function
+              _signOut(context);  // Call logout function
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Login(auth: widget.auth)),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Logout button color
@@ -124,10 +137,20 @@ class HomePage extends StatelessWidget {
   }
 
   // Logout function to navigate back to the LoginPage
-  void _logout(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage(title: 'Login Screen')),
-    );
+  // void _logout(BuildContext context) {
+  //   // Navigator.pushReplacement(
+  //   //   context,
+  //   //   MaterialPageRoute(builder: (context) => const EmailPasswordForm(auth: _MyHomePageState._auth)),
+  //   // );
+  // }
+  void _signOut(BuildContext context) async {
+    await widget.auth.signOut();
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const EmailPasswordForm(auth: widget.auth)),
+    // );
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //     content: Text('Signed out successfully'),
+  //   ));
   }
 }

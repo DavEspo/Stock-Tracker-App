@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'firebase_options.dart';
 import 'LoginScreen.dart';
 import 'SignupScreen.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
-  
+  WelcomePage({super.key});
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,7 @@ class WelcomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SignupPage()),
+                  MaterialPageRoute(builder: (context) => Signup(title: 'Signup', auth: auth)),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -44,7 +49,7 @@ class WelcomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const LoginPage(title: 'Login Screen'),
+                    builder: (context) => Login(auth: auth),
                   ),
                 );
               },
