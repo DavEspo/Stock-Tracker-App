@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'LoginScreen.dart';
-import 'StockDataScreen.dart';
-import 'WatchlistScreen.dart';
-import 'NewsFeedScreen.dart';
-import 'SettingsScreen.dart';
+import 'StockDataScreen.dart';  // Make sure you import StockDataScreen
+import 'WatchlistScreen.dart';  // Make sure you import WatchListScreen
+import 'NewsFeedScreen.dart';   // Make sure you import NewsFeedScreen
+import 'SettingsScreen.dart';   // Make sure you import SettingsScreen
+import 'LoginScreen.dart';      // Import LoginScreen for logout navigation
 
 class Home extends StatefulWidget {
   Home({Key? key, required this.auth}) : super(key: key);
@@ -15,8 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class HomePage extends State<Home> {
-  // const HomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,25 +22,26 @@ class HomePage extends State<Home> {
         title: const Text("Home Screen"),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 13, 222, 20),
-        // Removed logout button from the AppBar
       ),
       body: Column(
         children: [
+          // Stock Data Screen Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => StockDataScreen()),
-                // );
+                // Navigate to StockDataScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StockDataScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
                 fixedSize: const Size(370, 60),
-                backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Color for Recipe Screen
+                backgroundColor: const Color.fromARGB(255, 7, 165, 78),
               ),
               child: const Text(
                 "Stock Data Screen",
@@ -50,21 +49,24 @@ class HomePage extends State<Home> {
               ),
             ),
           ),
+          
+          // Watchlist Screen Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => WatchListScreen()),
-                // );
+                // Navigate to WatchlistScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WatchListScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 fixedSize: const Size(370, 60),
-                backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Color for Meal Planning Screen
+                backgroundColor: const Color.fromARGB(255, 7, 165, 78),
               ),
               child: const Text(
                 "Watchlist",
@@ -72,21 +74,24 @@ class HomePage extends State<Home> {
               ),
             ),
           ),
+          
+          // News Feed Screen Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const NewsFeedScreen()),
-                // );
+                // Navigate to NewsFeedScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewsFeedScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 fixedSize: const Size(370, 60),
-                backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Color for Favorite Screen
+                backgroundColor: const Color.fromARGB(255, 7, 165, 78),
               ),
               child: const Text(
                 "News Feed Screen",
@@ -94,21 +99,24 @@ class HomePage extends State<Home> {
               ),
             ),
           ),
+          
+          // Settings Screen Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: ElevatedButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SettingsScreen()),
-                // );
+                // Navigate to SettingsScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 fixedSize: const Size(370, 60),
-                backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Color for Settings Screen
+                backgroundColor: const Color.fromARGB(255, 7, 165, 78),
               ),
               child: const Text(
                 "Settings Screen",
@@ -116,8 +124,10 @@ class HomePage extends State<Home> {
               ),
             ),
           ),
+          
           const SizedBox(height: 20),
-          // Logout button
+          
+          // Logout Button
           ElevatedButton(
             onPressed: () {
               _signOut(context);  // Call logout function
@@ -127,7 +137,7 @@ class HomePage extends State<Home> {
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 7, 165, 78), // Logout button color
+              backgroundColor: const Color.fromARGB(255, 7, 165, 78),
             ),
             child: const Text("Logout"),
           ),
@@ -136,21 +146,12 @@ class HomePage extends State<Home> {
     );
   }
 
-  // Logout function to navigate back to the LoginPage
-  // void _logout(BuildContext context) {
-  //   // Navigator.pushReplacement(
-  //   //   context,
-  //   //   MaterialPageRoute(builder: (context) => const EmailPasswordForm(auth: _MyHomePageState._auth)),
-  //   // );
-  // }
+  // Sign out function
   void _signOut(BuildContext context) async {
     await widget.auth.signOut();
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const EmailPasswordForm(auth: widget.auth)),
-    // );
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //     content: Text('Signed out successfully'),
-  //   ));
+    // Optionally show a SnackBar confirming the sign out
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Signed out successfully')),
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'StockDataScreen.dart'; // Make sure to import this so StockManager is accessible
+import 'stock_manager.dart'; // Import StockManager class
 
 class WatchListScreen extends StatefulWidget {
   const WatchListScreen({super.key});
@@ -15,7 +15,7 @@ class _WatchListScreenState extends State<WatchListScreen> {
       appBar: AppBar(
         title: const Text('Watchlist Screen'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 13, 222, 20),
+        backgroundColor: const Color.fromARGB(255, 13, 222, 20), // Green color
       ),
       body: Column(
         children: [
@@ -23,13 +23,13 @@ class _WatchListScreenState extends State<WatchListScreen> {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16.0),
-              itemCount: StockManager.savedStocks.length,
+              itemCount: StockManager.savedStocks.length, // Number of saved stocks
               itemBuilder: (context, index) {
-                final stock = StockManager.savedStocks[index];
+                final stock = StockManager.savedStocks[index]; // Get stock symbol
                 return ListTile(
-                  title: Text(stock),
+                  title: Text(stock), // Display the stock symbol
                   trailing: IconButton(
-                    icon: const Icon(Icons.remove),
+                    icon: const Icon(Icons.remove), // Icon to remove from the watchlist
                     onPressed: () {
                       // Remove the stock from the saved list
                       setState(() {
@@ -48,7 +48,7 @@ class _WatchListScreenState extends State<WatchListScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context); // Go back to the previous screen (StockDataScreen)
             },
             child: const Text("Back to Home Screen"),
           ),
