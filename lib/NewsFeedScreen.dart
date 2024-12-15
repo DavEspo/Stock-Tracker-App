@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'news_api_service.dart'; // Import the NewsApiService
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsFeedScreen extends StatefulWidget {
   @override
@@ -33,15 +34,41 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
     } catch (e) {
       setState(() {
         isLoading = false; // Stop loading
-        errorMessage = 'Error loading news articles: $e'; // Set error message
+        errorMessage = 'Error loading news articles : $e'; // Set error message
       });
     }
   }
 
+  // Function to launch the URL
+  _launchURLBrowser(String urllink) async {
+    if (urllink == null || urllink.isEmpty) {
+      print("URL is null or empty");
+      return;
+    }
+
+    var url = Uri.parse(urllink);
+
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      print("Error launching URL: $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to open link: $e")));
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('News Feed')),
+      appBar: AppBar(
+        title: Text('News Feed'),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 13, 222, 20),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: isLoading
@@ -72,7 +99,7 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                 // Open the full article in the browser
                                 String? url = article['url'];
                                 if (url != null) {
-                                  // Open the link
+                                  // Open the link in a dialog for confirmation
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
@@ -82,14 +109,14 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Open URL in browser
+                                              // Close the dialog and launch the URL
                                               Navigator.of(context).pop();
-                                              
+                                              _launchURLBrowser(url);
                                             },
                                             child: Text('Open'),
                                           ),
                                           TextButton(
-                                            onPressed: () => Navigator.of(context).pop(),
+                                            onPressed: () => Navigator.of(context).pop(), // Close dialog
                                             child: Text('Cancel'),
                                           ),
                                         ],
