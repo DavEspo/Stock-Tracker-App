@@ -14,8 +14,6 @@ class Signup extends StatefulWidget {
 }
 
 class SignupPage extends State<Signup> {
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

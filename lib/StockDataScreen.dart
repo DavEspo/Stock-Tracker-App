@@ -11,6 +11,8 @@ class _StockDataScreenState extends State<StockDataScreen> {
   bool isLoading = true;
   String errorMessage = '';
   List<Map<String, dynamic>>? allStockData; // List to hold data for multiple stocks
+  List<Map<String, dynamic>>? allStockDataBackup; // Backup to hold original unfiltered stock data
+  final controller = TextEditingController();
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _StockDataScreenState extends State<StockDataScreen> {
 
       setState(() {
         allStockData = fetchedData; // Save fetched data for all stocks
+        allStockDataBackup = List.from(fetchedData); // Create a backup of the original data
         isLoading = false; // Update the loading state
       });
     } catch (e) {
@@ -59,6 +62,29 @@ class _StockDataScreenState extends State<StockDataScreen> {
     );
   }
 
+  // Function to search stocks
+  void searchBook(String query) {
+    if (allStockDataBackup == null || allStockData == null) {
+      return; // Return early if data is not loaded yet
+    }
+
+    if (query.isEmpty) {
+      setState(() {
+        allStockData = List.from(allStockDataBackup!); // Restore the original data
+      });
+    } else {
+      final suggestions = allStockDataBackup!.where((stock) {
+        final symbol = stock['symbol'].toLowerCase();
+        final input = query.toLowerCase();
+        return symbol.contains(input);
+      }).toList();
+
+      setState(() {
+        allStockData = suggestions;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,36 +96,66 @@ class _StockDataScreenState extends State<StockDataScreen> {
             : errorMessage.isNotEmpty
                 ? Center(child: Text(errorMessage, style: TextStyle(color: Colors.red)))
                 : allStockData != null
-                    ? ListView.builder(
-                        itemCount: allStockData!.length,
-                        itemBuilder: (context, index) {
-                          var stock = allStockData![index];
-                          return Card(
-                            margin: EdgeInsets.symmetric(vertical: 8.0),
-                            child: ListTile(
-                              title: Text(
-                                'Stock: ${stock['symbol']}',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ? Column(
+                        children: [
+                          SizedBox(height: 5),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(16, 5, 16, 16),
+                            child: TextField(
+                              controller: controller,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.search),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    controller.clear();
+                                    searchBook(''); // Clear the search and reset the list
+                                  },
+                                ),
+                                hintText: 'Find Stock',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: Colors.blue),
+                                ),
                               ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Current Price: \$${stock['c']}'),
-                                  Text('High: \$${stock['h']}'),
-                                  Text('Low: \$${stock['l']}'),
-                                  Text('Open: \$${stock['o']}'),
-                                  Text('Previous Close: \$${stock['pc']}'),
-                                ],
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  addToWatchlist(stock['symbol']); // Add stock to watchlist
-                                },
-                              ),
+                              onChanged: searchBook,
                             ),
-                          );
-                        },
+                          ),
+                          // Wrap ListView.builder in an Expanded widget
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: allStockData!.length,
+                              itemBuilder: (context, index) {
+                                var stock = allStockData![index];
+                                return Card(
+                                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                                  child: ListTile(
+                                    title: Text(
+                                      'Stock: ${stock['symbol']}',
+                                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Current Price: \$${stock['c']}'),
+                                        Text('High: \$${stock['h']}'),
+                                        Text('Low: \$${stock['l']}'),
+                                        Text('Open: \$${stock['o']}'),
+                                        Text('Previous Close: \$${stock['pc']}'),
+                                      ],
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.add),
+                                      onPressed: () {
+                                        addToWatchlist(stock['symbol']); // Add stock to watchlist
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       )
                     : Center(child: Text('No stock data available')),
       ),

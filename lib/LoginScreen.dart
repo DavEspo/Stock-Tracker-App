@@ -90,11 +90,11 @@ class _EmailPasswordFormState extends State<EmailPasswordForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            child: Text('Test sign in with email and password'),
-            padding: const EdgeInsets.all(16),
-            alignment: Alignment.center,
-          ),
+          // Container(
+          //   child: Text('Test sign in with email and password'),
+          //   padding: const EdgeInsets.all(16),
+          //   alignment: Alignment.center,
+          // ),
           TextFormField(
             controller: _emailController,
             decoration: InputDecoration(labelText: 'Email'),
