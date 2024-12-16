@@ -49,8 +49,9 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
     var url = Uri.parse(urllink);
 
     try {
+      // Ensure we are using the correct API call with mode
       if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
+        await launchUrl(url, mode: LaunchMode.externalApplication); // Opens in external browser
       } else {
         throw 'Could not launch $url';
       }
@@ -59,7 +60,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to open link: $e")));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
