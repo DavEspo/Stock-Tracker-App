@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';  // Firebase Authentication
-import 'package:cloud_firestore/cloud_firestore.dart'; // Firebase Firestore
-import 'database_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'WelcomeScreen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  // Function to delete user account from Firebase Authentication and Firestore
+  // Delete account from Firebase Authentication
   Future<void> _deleteAccount(BuildContext context) async {
     try {
       // Get the current user
       User? user = FirebaseAuth.instance.currentUser;
 
       if (user == null) {
-        // If no user is logged in, show an error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("No user is currently logged in!")),
         );
@@ -28,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
       await user.delete();
 
       // Step 3: Logout the user and navigate to the welcome screen
-      await DatabaseHelper().logoutUser(); // Implement in DatabaseHelper (for local database)
+      // await DatabaseHelper().logoutUser(); // Implement in DatabaseHelper (for local database)
       
       // Navigate to WelcomeScreen (Login screen)
       Navigator.pushReplacement(
